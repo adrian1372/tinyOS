@@ -22,17 +22,25 @@ CFLAGS=-nostdlib -ffreestanding -std=c99 -mno-red-zone -nostdlib
 CWARN=-Wall -Wextra -Werror
 LINKER=linker.ld
 
+OBJS-ASM=boot.o #kernel_entry.o
+OBJS-C=kernel.o stdio.c ps2kbd.o 
+
 INCLUDE=include
 
 myos.img : kernel.bin
 	dd if=/dev/zero of=myos.img bs=512 count=2880 &&\
 	dd if=kernel.bin of=myos.img seek=0 conv=notrunc
 
-boot.o : boot.asm
-	nasm -f elf32 boot.asm -o boot.o
+%.o : %.asm kernel_entry.asm
+	nasm -f elf32 $< -o $@
 
-kernel.bin : boot.o kernel.c stdio.c 
-	$(CC) -m32 stdio.c kernel.c boot.o \
+%.o : %.c
+	$(CC) -m32 -c $< -o $@ \
+		$(CFLAGS) $(CWARN) \
+		-I$(INCLUDE)
+
+kernel.bin : $(OBJS-ASM) $(OBJS-C) 
+	$(CC) -m32 $(OBJS-ASM) $(OBJS-C) \
 		-o kernel.bin \
 		$(CFLAGS) $(CWARN) \
 		-I$(INCLUDE) -T $(LINKER)

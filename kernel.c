@@ -18,8 +18,6 @@
  *
  */
 
-
-
 #include <tinyos/stdio.h>
 
 int main()

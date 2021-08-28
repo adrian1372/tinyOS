@@ -39,13 +39,13 @@ _start:
 	int 0x10
 
 read_disk:
-	mov ah, 0x02		; Function number - Read sectors from drive
-	mov al, 0x0A		; Read 10 sectors from disk
-	mov ch, 0x00		; Read from cylinder 0
-	mov cl, 0x02		; Read starting at cylinder 2
-	mov dh, 0x00		; Read head 0
-	mov dl, [diskno]	; Read from diskno (currently, same as boot disk)
-	mov bx, program		; Target code pointer, here the program
+	mov ah, 0x02			; Function number - Read sectors from drive
+	mov al, 0x0A			; Read 10 sectors from disk
+	mov ch, 0x00			; Read from cylinder 0
+	mov cl, 0x02			; Read starting at cylinder 2
+	mov dh, 0x00			; Read head 0
+	mov dl, [diskno]		; Read from diskno (currently, same as boot disk)
+	mov bx, enter_kernel	; Target code pointer, here the program
 	int 0x13
 
 ; Do the actual steps to enter Protcted Mode
@@ -128,25 +128,8 @@ dw 0xAA55
 ; Write 2 adjacent bytes to print a character to screen;
 ;	- First byte: CHAR
 ;	- Second byte: COLOUR
-program:
+enter_kernel:
 [BITS 32]
 start_protected_mode:
-;mov al, 'A'
-;mov ah, 0x0F
-;mov [0xB8000], ax
-extern main
-call main
+%include "kernel_entry.asm"
 
-global os_halt
-os_halt:
-	cli
-	hlt
-
-;times 1536 - ($ - $$) db 0	; Fill up 2 sectors (apart from boot sector)
-
-section .bss
-align 4
-
-kernel_stack_bottom: equ $
-	resb 16384
-kernel_stack_top:
