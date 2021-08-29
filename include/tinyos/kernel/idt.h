@@ -18,6 +18,21 @@ struct idt_ptr
 	uint32_t base;
 } __attribute__((packed));
 
-extern void idt_load();
+/*
+ * Loads the Interrupt Descriptor Table, defined in ASM
+ */
+extern void _idt_load();
+
+/*
+ * Sets an entry in the Interrupt Descriptor Table
+ */
+void idt_set_gate(uint8_t num, uint32_t base, uint16_t sel, uint8_t flags);
+
+/*
+ * Installs the Interrupt Descriptor Table
+ */
+void idt_install();
+
+void isrs_install();
 
 #endif

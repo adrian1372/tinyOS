@@ -18,11 +18,21 @@
  *
  */
 
+#include <tinyos/kernel/system.h>
+#include <tinyos/kernel/idt.h>
+#include <tinyos/kernel/irq.h>
 #include <tinyos/stdio.h>
 
 int main()
 {
 	const char *string = "Hello World!!\ndasdasd";
+
+	/* Install the IDT, ISRS, IRQ and finally allow IRQs to happen */
+	idt_install();
+	isrs_install();
+	irq_install();
+	__asm__ volatile ("sti");
+
 	puts(string);
 
 	return 0; // Return to ASM code
