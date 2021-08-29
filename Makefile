@@ -23,7 +23,7 @@ CWARN=-Wall -Wextra -Werror
 LINKER=linker.ld
 
 OBJS-ASM=boot.o kernel_entry.o
-OBJS-C=kernel.o stdio.c ps2kbd.o 
+OBJS-C=kernel.o stdio.c ps2kbd.o idt.o
 
 INCLUDE=include
 
