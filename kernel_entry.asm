@@ -1,17 +1,19 @@
-%ifndef __KERNEL_ENTRY_ASM__
-%define __KERNEL_ENTRY_ASM__
 [BITS 32]
+global init_kernel
+global os_halt
 
 extern puts
 extern main
 
-call main
+init_kernel:
+	call main
 
-push exitmessage
-call puts
-add ESP, 4
+	push exitmessage
+	call puts
+	add ESP, 4
 
-global os_halt
+	call os_halt
+
 os_halt:
 	jmp $
 	cli
@@ -27,5 +29,4 @@ kernel_stack_bottom: equ $
 	resb 16384
 kernel_stack_top:
 
-%endif
 

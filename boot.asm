@@ -131,5 +131,5 @@ dw 0xAA55
 enter_kernel:
 [BITS 32]
 start_protected_mode:
-%include "kernel_entry.asm"
-
+extern init_kernel
+call init_kernel
