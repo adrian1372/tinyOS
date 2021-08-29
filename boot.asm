@@ -24,6 +24,7 @@
 section .boot			; Mark as boot section (for the linker)
 [BITS 16]
 global boot
+global DATA_SEG
 ; Linker will handle the ORG 0x7C00 part
 
 ; ---- START OF BOOT SECTOR ---- ;
@@ -40,7 +41,7 @@ _start:
 
 read_disk:
 	mov ah, 0x02			; Function number - Read sectors from drive
-	mov al, 0x0A			; Read 10 sectors from disk
+	mov al, 0x0F			; Read 15 sectors from disk
 	mov ch, 0x00			; Read from cylinder 0
 	mov cl, 0x02			; Read starting at cylinder 2
 	mov dh, 0x00			; Read head 0
@@ -133,3 +134,11 @@ enter_kernel:
 start_protected_mode:
 extern init_kernel
 call init_kernel
+
+
+section .bss
+align 4
+
+kernel_stack_bottom: equ $
+	resb 16384
+kernel_stack_top:

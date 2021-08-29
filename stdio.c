@@ -19,7 +19,7 @@
 
 #include <tinyos/stdio.h>
 #include <tinyos/inttypes.h>
-#include <tinyos/hw.h>
+#include <tinyos/kernel/hw.h>
 
 /* ========= START OF INTERNAL SECTION ========= */
 
